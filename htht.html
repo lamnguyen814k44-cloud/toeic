@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOEIC Present Perfect Continuous - Interactive Quiz</title>
+    <title>TOEIC Present Perfect Continuous Quiz</title>
     <style>
         * {
             margin: 0;
@@ -12,308 +12,459 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
             color: #333;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
         }
 
         .header {
             background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            text-align: center;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .header h1 {
-            color: #1e3c72;
-            font-size: 28px;
-            margin-bottom: 10px;
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
         }
 
-        .progress-container {
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 4px;
+            color: #333;
+        }
+
+        .header-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-title h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .timer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #e3f2fd;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #1976d2;
+        }
+
+        .timer-icon {
+            font-size: 18px;
+        }
+
+        .progress-section {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #666;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: #e0e0e0;
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            background: #2196f3;
             transition: width 0.3s ease;
         }
 
-        .progress-text {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-            color: #666;
+        .content {
+            padding: 16px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .quiz-card {
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 12px 16px;
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+
+        .section-icon {
+            color: #2196f3;
+            font-size: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .question-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .question-label {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1a1a1a;
             margin-bottom: 20px;
         }
 
-        .level-badge {
-            display: inline-block;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-bottom: 15px;
+        .question-image {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 24px;
+            display: block;
+            border-radius: 8px;
         }
 
-        .level-basic {
-            background: #E3F2FD;
-            color: #1976D2;
-        }
-
-        .level-intermediate {
-            background: #FFF3E0;
-            color: #F57C00;
-        }
-
-        .level-advanced {
-            background: #FCE4EC;
-            color: #C2185B;
-        }
-
-        .question {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 25px;
-            color: #222;
-        }
-
-        .options {
+        .options-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .option {
-            padding: 18px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 16px;
             background: white;
-            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .option:hover:not(.selected):not(.disabled) {
-            border-color: #2a5298;
+        .option-item:hover:not(.disabled) {
+            border-color: #2196f3;
             background: #f5f9ff;
-            transform: translateX(5px);
         }
 
-        .option.selected {
+        .option-item.disabled {
             cursor: default;
         }
 
-        .option.correct {
-            border-color: #4CAF50;
-            background: #E8F5E9;
+        .option-item.selected {
+            border-color: #2196f3;
+            background: #e3f2fd;
         }
 
-        .option.incorrect {
+        .option-item.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .option-item.incorrect {
             border-color: #f44336;
-            background: #FFEBEE;
+            background: #ffebee;
         }
 
-        .option.disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
+        .option-radio {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #bdbdbd;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+            position: relative;
+            transition: all 0.2s ease;
         }
 
-        .explanation {
+        .option-item.selected .option-radio,
+        .option-item.correct .option-radio {
+            border-color: #2196f3;
+        }
+
+        .option-item.correct .option-radio {
+            border-color: #4caf50;
+        }
+
+        .option-item.incorrect .option-radio {
+            border-color: #f44336;
+        }
+
+        .option-item.selected .option-radio::after,
+        .option-item.correct .option-radio::after,
+        .option-item.incorrect .option-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #2196f3;
+        }
+
+        .option-item.correct .option-radio::after {
+            background: #4caf50;
+        }
+
+        .option-item.incorrect .option-radio::after {
+            background: #f44336;
+        }
+
+        .option-text {
+            font-size: 15px;
+            color: #1a1a1a;
+            flex: 1;
+        }
+
+        .explanation-box {
             margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 16px;
+            border-radius: 12px;
             display: none;
-            animation: slideDown 0.4s ease;
+            animation: slideDown 0.3s ease;
         }
 
-        .explanation.show {
+        .explanation-box.show {
             display: block;
         }
 
-        .explanation.correct-explanation {
-            background: #E8F5E9;
-            border-left: 4px solid #4CAF50;
+        .explanation-box.correct {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
         }
 
-        .explanation.incorrect-explanation {
-            background: #FFEBEE;
+        .explanation-box.incorrect {
+            background: #ffebee;
             border-left: 4px solid #f44336;
         }
 
-        .explanation h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
+        .explanation-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .explanation p {
+        .explanation-content {
+            font-size: 14px;
             line-height: 1.6;
-            margin-bottom: 12px;
+            color: #424242;
+        }
+
+        .explanation-content p {
+            margin-bottom: 10px;
         }
 
         .why-wrong {
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 12px;
+            padding-top: 12px;
             border-top: 1px solid rgba(0,0,0,0.1);
         }
 
         .why-wrong h4 {
             font-size: 14px;
+            font-weight: 600;
             margin-bottom: 8px;
-            color: #666;
+            color: #616161;
         }
 
         .why-wrong ul {
             list-style: none;
-            padding-left: 0;
+            padding: 0;
         }
 
         .why-wrong li {
-            padding: 6px 0;
-            font-size: 14px;
+            font-size: 13px;
+            padding: 4px 0;
             color: #555;
         }
 
         .navigation {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 12px 16px;
             display: flex;
-            justify-content: space-between;
-            gap: 15px;
+            gap: 12px;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
         }
 
-        .nav-button {
+        .nav-btn {
             flex: 1;
-            padding: 15px;
+            padding: 14px 24px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .nav-button:disabled {
+        .nav-btn:disabled {
             opacity: 0.4;
             cursor: not-allowed;
         }
 
-        .prev-button {
-            background: #757575;
+        .btn-prev {
+            background: white;
+            color: #424242;
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #f5f5f5;
+            border-color: #bdbdbd;
+        }
+
+        .btn-next {
+            background: #2196f3;
             color: white;
         }
 
-        .prev-button:hover:not(:disabled) {
-            background: #616161;
-            transform: translateY(-2px);
+        .btn-next:hover:not(:disabled) {
+            background: #1976d2;
         }
 
-        .next-button {
-            background: #2a5298;
+        .btn-finish {
+            background: #4caf50;
             color: white;
         }
 
-        .next-button:hover:not(:disabled) {
-            background: #1e3c72;
-            transform: translateY(-2px);
-        }
-
-        .finish-button {
-            background: #4CAF50;
-            color: white;
-        }
-
-        .finish-button:hover {
-            background: #43A047;
-            transform: translateY(-2px);
+        .btn-finish:hover {
+            background: #43a047;
         }
 
         .result-screen {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            text-align: center;
             display: none;
+            padding: 40px 16px;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
         }
 
         .result-screen.show {
             display: block;
-            animation: fadeIn 0.5s ease;
+        }
+
+        .result-card {
+            background: white;
+            padding: 40px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #1a1a1a;
         }
 
         .score-circle {
-            width: 180px;
-            height: 180px;
-            margin: 30px auto;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 24px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            font-weight: bold;
+            font-size: 42px;
+            font-weight: 700;
             color: white;
+            position: relative;
         }
 
         .score-excellent {
-            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
         }
 
         .score-good {
-            background: linear-gradient(135deg, #2196F3, #03A9F4);
+            background: linear-gradient(135deg, #2196f3, #03a9f4);
         }
 
         .score-fair {
-            background: linear-gradient(135deg, #FF9800, #FFC107);
+            background: linear-gradient(135deg, #ff9800, #ffc107);
         }
 
         .score-poor {
-            background: linear-gradient(135deg, #f44336, #E91E63);
+            background: linear-gradient(135deg, #f44336, #e91e63);
         }
 
-        .restart-button {
-            margin-top: 30px;
-            padding: 15px 40px;
-            background: #2a5298;
+        .result-message {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .result-detail {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .restart-btn {
+            padding: 14px 32px;
+            background: #2196f3;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
-        .restart-button:hover {
-            background: #1e3c72;
-            transform: translateY(-2px);
+        .restart-btn:hover {
+            background: #1976d2;
         }
 
         @keyframes slideDown {
@@ -327,69 +478,88 @@
             }
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 22px;
+            .header-title h1 {
+                font-size: 14px;
             }
             
-            .quiz-card {
-                padding: 20px;
+            .timer {
+                padding: 6px 10px;
+                font-size: 14px;
             }
             
-            .question {
-                font-size: 16px;
-            }
-            
-            .option {
-                padding: 15px;
+            .question-text {
                 font-size: 15px;
+            }
+            
+            .option-text {
+                font-size: 14px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🎯 TOEIC Present Perfect Continuous Quiz</h1>
-            <p>Mục tiêu: 950+ | 30 câu từ cơ bản đến nâng cao</p>
-        </div>
-
-        <div class="progress-container">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <button class="back-btn" onclick="if(confirm('Bạn có chắc muốn thoát?')) window.close()">←</button>
+            <div class="header-title">
+                <h1>TOEIC Present Perfect Continuous Quiz</h1>
+                <p>Mục tiêu: 950+</p>
             </div>
-            <div class="progress-text" id="progressText">Câu 1/30</div>
+        </div>
+        <div class="timer">
+            <span class="timer-icon">🕐</span>
+            <span id="timerDisplay">45:00</span>
+        </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section">
+        <div class="progress-header">
+            <span id="questionCounter">Câu 1/30</span>
+            <span id="percentage">3%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content" id="quizContent">
+        <div class="section-header">
+            <span class="section-icon">📝</span>
+            <span class="section-title">Phần 1: Trắc nghiệm</span>
         </div>
 
-        <div class="quiz-card" id="quizCard">
-            <div class="level-badge" id="levelBadge"></div>
-            <div class="question" id="question"></div>
-            <div class="options" id="options"></div>
-            <div class="explanation" id="explanation"></div>
+        <div class="question-card">
+            <div class="question-label" id="questionLabel">CÂU 1</div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-list" id="optionsList"></div>
+            <div class="explanation-box" id="explanationBox"></div>
         </div>
+    </div>
 
-        <div class="navigation">
-            <button class="nav-button prev-button" id="prevBtn" onclick="previousQuestion()">← Câu trước</button>
-            <button class="nav-button next-button" id="nextBtn" onclick="nextQuestion()">Câu sau →</button>
-        </div>
+    <!-- Navigation -->
+    <div class="navigation" id="navigation">
+        <button class="nav-btn btn-prev" id="prevBtn" onclick="previousQuestion()">
+            ← Câu trước
+        </button>
+        <button class="nav-btn btn-next" id="nextBtn" onclick="nextQuestion()">
+            Câu tiếp theo →
+        </button>
+    </div>
 
-        <div class="result-screen" id="resultScreen">
-            <h2>🎉 Hoàn thành!</h2>
+    <!-- Result Screen -->
+    <div class="result-screen" id="resultScreen">
+        <div class="result-card">
+            <h2 class="result-title">🎉 Hoàn thành!</h2>
             <div class="score-circle" id="scoreCircle">
                 <span id="scoreText"></span>
             </div>
-            <h3 id="resultMessage"></h3>
-            <p id="resultDetail"></p>
-            <button class="restart-button" onclick="restartQuiz()">🔄 Làm lại</button>
+            <h3 class="result-message" id="resultMessage"></h3>
+            <p class="result-detail" id="resultDetail"></p>
+            <button class="restart-btn" onclick="restartQuiz()">🔄 Làm lại bài test</button>
         </div>
     </div>
 
@@ -399,10 +569,10 @@
                 level: "Basic",
                 question: "The company ________ a new marketing strategy for the past three months.",
                 options: [
-                    "A. has been developing",
-                    "B. has developed",
-                    "C. was developing",
-                    "D. develops"
+                    "has been developing",
+                    "has developed",
+                    "was developing",
+                    "develops"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been developing' (hiện tại hoàn thành tiếp diễn) diễn tả hành động bắt đầu từ quá khứ, kéo dài liên tục đến hiện tại và nhấn mạnh sự liên tục. Có 'for the past three months' chỉ khoảng thời gian kéo dài.",
@@ -416,10 +586,10 @@
                 level: "Basic",
                 question: "We ________ for the manager since 9 a.m., but he still hasn't arrived.",
                 options: [
-                    "A. have been waiting",
-                    "B. waited",
-                    "C. are waiting",
-                    "D. wait"
+                    "have been waiting",
+                    "waited",
+                    "are waiting",
+                    "wait"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been waiting' diễn tả hành động bắt đầu từ 9 giờ sáng, kéo dài liên tục đến hiện tại (vẫn đang chờ). Từ 'since' là dấu hiệu của Present Perfect Continuous.",
@@ -433,10 +603,10 @@
                 level: "Basic",
                 question: "She looks tired because she ________ on this report all day.",
                 options: [
-                    "A. has been working",
-                    "B. worked",
-                    "C. works",
-                    "D. is working"
+                    "has been working",
+                    "worked",
+                    "works",
+                    "is working"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been working' giải thích nguyên nhân hiện tại (tired) bằng hành động kéo dài suốt cả ngày. Present Perfect Continuous thường dùng để giải thích kết quả/hậu quả ở hiện tại.",
@@ -450,10 +620,10 @@
                 level: "Basic",
                 question: "How long ________ English before you moved to the US?",
                 options: [
-                    "A. had you been studying",
-                    "B. have you been studying",
-                    "C. did you study",
-                    "D. are you studying"
+                    "had you been studying",
+                    "have you been studying",
+                    "did you study",
+                    "are you studying"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Had you been studying' (quá khứ hoàn thành tiếp diễn) diễn tả hành động kéo dài đến một mốc trong quá khứ (before you moved). Câu hỏi về khoảng thời gian trước sự kiện quá khứ.",
@@ -467,10 +637,10 @@
                 level: "Basic",
                 question: "They ________ the new software for two weeks now.",
                 options: [
-                    "A. have been testing",
-                    "B. tested",
-                    "C. test",
-                    "D. were testing"
+                    "have been testing",
+                    "tested",
+                    "test",
+                    "were testing"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been testing' với 'for two weeks now' chỉ hành động bắt đầu 2 tuần trước, vẫn tiếp diễn đến hiện tại. 'Now' nhấn mạnh liên hệ với thời điểm nói.",
@@ -484,10 +654,10 @@
                 level: "Basic",
                 question: "I ________ to contact you all morning. Where have you been?",
                 options: [
-                    "A. have been trying",
-                    "B. tried",
-                    "C. try",
-                    "D. was trying"
+                    "have been trying",
+                    "tried",
+                    "try",
+                    "was trying"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been trying' diễn tả nỗ lực liên tục từ sáng đến giờ. 'All morning' là dấu hiệu của Present Perfect Continuous, và câu hỏi 'Where have you been?' xác nhận thời điểm hiện tại.",
@@ -501,15 +671,15 @@
                 level: "Intermediate",
                 question: "The sales team ________ consistently high results this quarter, which is why they received a bonus.",
                 options: [
-                    "A. has been achieving",
-                    "B. has achieved",
-                    "C. achieved",
-                    "D. had been achieving"
+                    "has achieved",
+                    "has been achieving",
+                    "achieved",
+                    "had been achieving"
                 ],
-                correct: 1,
+                correct: 0,
                 explanation: "Đúng! 'Has achieved' (hiện tại hoàn thành đơn) nhấn mạnh KẾT QUẢ (high results) đã đạt được, dẫn đến phần thưởng. Present Perfect Continuous nhấn mạnh quá trình, nhưng ở đây ta cần nhấn mạnh thành tích.",
                 whyWrong: [
-                    "A. Has been achieving: nhấn mạnh quá trình liên tục hơn là kết quả cụ thể, ít phù hợp với 'received a bonus' (kết quả rõ ràng).",
+                    "B. Has been achieving: nhấn mạnh quá trình liên tục hơn là kết quả cụ thể, ít phù hợp với 'received a bonus' (kết quả rõ ràng).",
                     "C. Achieved (quá khứ đơn): không liên kết với hiện tại 'this quarter' vẫn đang trong thời gian hiện tại.",
                     "D. Had been achieving (quá khứ hoàn thành tiếp diễn): dùng cho hành động trước một mốc quá khứ, không phù hợp ở đây."
                 ]
@@ -518,10 +688,10 @@
                 level: "Intermediate",
                 question: "Ms. Johnson ________ with several international clients lately, so she might be unavailable.",
                 options: [
-                    "A. has been meeting",
-                    "B. meets",
-                    "C. met",
-                    "D. is meeting"
+                    "has been meeting",
+                    "meets",
+                    "met",
+                    "is meeting"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been meeting' với 'lately' diễn tả các cuộc họp liên tục trong thời gian gần đây, giải thích tình trạng hiện tại (might be unavailable). Nhấn mạnh sự lặp lại và liên tục.",
@@ -535,10 +705,10 @@
                 level: "Intermediate",
                 question: "The construction noise ________ me awake every night this week.",
                 options: [
-                    "A. has been keeping",
-                    "B. kept",
-                    "C. keeps",
-                    "D. is keeping"
+                    "has been keeping",
+                    "kept",
+                    "keeps",
+                    "is keeping"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been keeping' diễn tả tình trạng tiếp diễn suốt tuần này ('this week' - khoảng thời gian chưa kết thúc). Present Perfect Continuous phù hợp với hành động lặp lại trong khoảng thời gian đến hiện tại.",
@@ -552,10 +722,10 @@
                 level: "Intermediate",
                 question: "Our team ________ overtime to meet the deadline, but we still need more time.",
                 options: [
-                    "A. has been working",
-                    "B. worked",
-                    "C. works",
-                    "D. had worked"
+                    "has been working",
+                    "worked",
+                    "works",
+                    "had worked"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been working' nhấn mạnh nỗ lực liên tục đến hiện tại, và 'but we still need' cho thấy hành động vẫn liên quan đến hiện tại. Present Perfect Continuous phù hợp để nói về nỗ lực chưa đạt kết quả mong muốn.",
@@ -569,15 +739,15 @@
                 level: "Intermediate",
                 question: "The company ________ its market share gradually over the last five years.",
                 options: [
-                    "A. has been increasing",
-                    "B. has increased",
-                    "C. increased",
-                    "D. increases"
+                    "has increased",
+                    "has been increasing",
+                    "increased",
+                    "increases"
                 ],
-                correct: 1,
+                correct: 0,
                 explanation: "Đúng! 'Has increased' nhấn mạnh KẾT QUẢ (thị phần đã tăng), trong khi 'gradually over the last five years' mô tả quá trình. Với động từ trạng thái như 'increase' (có thể đo lường), ta thường dùng Present Perfect để nhấn mạnh thành tựu.",
                 whyWrong: [
-                    "A. Has been increasing: cũng đúng ngữ pháp nhưng trong TOEIC, khi có kết quả đo lường rõ ràng (market share), Present Perfect Simple được ưa chuộng hơn.",
+                    "B. Has been increasing: cũng đúng ngữ pháp nhưng trong TOEIC, khi có kết quả đo lường rõ ràng (market share), Present Perfect Simple được ưa chuộng hơn.",
                     "C. Increased (quá khứ đơn): 'over the last five years' kéo dài đến hiện tại nên cần Present Perfect.",
                     "D. Increases (hiện tại đơn): diễn tả sự thật chung, không phù hợp với khoảng thời gian cụ thể 'last five years'."
                 ]
@@ -586,10 +756,10 @@
                 level: "Intermediate",
                 question: "Why is the office so messy? What ________ here?",
                 options: [
-                    "A. have you been doing",
-                    "B. did you do",
-                    "C. do you do",
-                    "D. were you doing"
+                    "have you been doing",
+                    "did you do",
+                    "do you do",
+                    "were you doing"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have you been doing' hỏi về hành động vừa xảy ra, còn để lại kết quả ở hiện tại (messy office). Present Perfect Continuous dùng để hỏi về nguyên nhân của tình trạng hiện tại.",
@@ -603,15 +773,15 @@
                 level: "Advanced",
                 question: "The research department ________ data from various sources, which should help us make an informed decision.",
                 options: [
-                    "A. has been collecting",
-                    "B. has collected",
-                    "C. had been collecting",
-                    "D. collected"
+                    "has collected",
+                    "has been collecting",
+                    "had been collecting",
+                    "collected"
                 ],
-                correct: 1,
+                correct: 0,
                 explanation: "Đúng! 'Has collected' nhấn mạnh dữ liệu ĐÃ THU THẬP XONG và sẵn sàng để ra quyết định. 'Which should help' chỉ kết quả hoàn thành. Nếu dùng 'has been collecting', ngụ ý vẫn đang thu thập, chưa sẵn sàng.",
                 whyWrong: [
-                    "A. Has been collecting: nhấn mạnh quá trình vẫn đang tiếp diễn, không phù hợp với 'should help us make a decision' (cần dữ liệu đã có).",
+                    "B. Has been collecting: nhấn mạnh quá trình vẫn đang tiếp diễn, không phù hợp với 'should help us make a decision' (cần dữ liệu đã có).",
                     "C. Had been collecting (quá khứ hoàn thành tiếp diễn): dùng cho hành động trước một mốc quá khứ, không hợp lý ở đây.",
                     "D. Collected (quá khứ đơn): không liên kết với hiện tại (should help us now)."
                 ]
@@ -620,10 +790,10 @@
                 level: "Advanced",
                 question: "By the time we launch the product, the team ________ on this project for over a year.",
                 options: [
-                    "A. will have been working",
-                    "B. has been working",
-                    "C. will work",
-                    "D. works"
+                    "will have been working",
+                    "has been working",
+                    "will work",
+                    "works"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Will have been working' (tương lai hoàn thành tiếp diễn) diễn tả hành động sẽ kéo dài cho đến một thời điểm trong tương lai (when we launch). 'By the time' là dấu hiệu của Future Perfect Continuous.",
@@ -637,10 +807,10 @@
                 level: "Advanced",
                 question: "The company's profits ________ steadily, despite the economic downturn affecting most competitors.",
                 options: [
-                    "A. have been rising",
-                    "B. rise",
-                    "C. rose",
-                    "D. had risen"
+                    "have been rising",
+                    "rise",
+                    "rose",
+                    "had risen"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been rising' diễn tả xu hướng tăng liên tục đến hiện tại, đặc biệt trong bối cảnh khó khăn ('despite downturn'). Present Perfect Continuous nhấn mạnh sự liên tục và đáng chú ý của xu hướng.",
@@ -654,10 +824,10 @@
                 level: "Advanced",
                 question: "Employees ________ about the lack of communication from management recently.",
                 options: [
-                    "A. have been complaining",
-                    "B. complained",
-                    "C. complain",
-                    "D. are complaining"
+                    "have been complaining",
+                    "complained",
+                    "complain",
+                    "are complaining"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been complaining' với 'recently' diễn tả tình trạng phàn nàn liên tục trong thời gian gần đây. Present Perfect Continuous thích hợp cho hành động lặp lại nhiều lần trong một khoảng thời gian đến hiện tại.",
@@ -671,10 +841,10 @@
                 level: "Advanced",
                 question: "The manufacturing plant ________ at full capacity since the beginning of the year to meet increased demand.",
                 options: [
-                    "A. has been operating",
-                    "B. operates",
-                    "C. operated",
-                    "D. will operate"
+                    "has been operating",
+                    "operates",
+                    "operated",
+                    "will operate"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been operating' với 'since the beginning of the year' diễn tả hoạt động liên tục từ đầu năm đến nay. 'Since' là dấu hiệu điển hình của Present Perfect Continuous, và 'at full capacity' nhấn mạnh cường độ liên tục.",
@@ -688,10 +858,10 @@
                 level: "Advanced",
                 question: "Mr. Peterson ________ the same presentation to different departments all week, which explains why he looks exhausted.",
                 options: [
-                    "A. has been giving",
-                    "B. gave",
-                    "C. gives",
-                    "D. is giving"
+                    "has been giving",
+                    "gave",
+                    "gives",
+                    "is giving"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been giving' diễn tả hành động lặp lại nhiều lần suốt tuần ('all week' - chưa kết thúc), giải thích tình trạng hiện tại (looks exhausted). Perfect structure cho TOEIC 950+.",
@@ -705,10 +875,10 @@
                 level: "Advanced",
                 question: "Investors ________ confidence in the stock market lately due to political instability.",
                 options: [
-                    "A. have been losing",
-                    "B. lose",
-                    "C. lost",
-                    "D. had lost"
+                    "have been losing",
+                    "lose",
+                    "lost",
+                    "had lost"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been losing' với 'lately' diễn tả xu hướng mất dần niềm tin trong thời gian gần đây. Present Perfect Continuous phù hợp để mô tả xu hướng/thay đổi dần dần đang diễn ra.",
@@ -722,10 +892,10 @@
                 level: "Advanced",
                 question: "The IT department ________ with network issues all morning, so some services may still be affected.",
                 options: [
-                    "A. has been dealing",
-                    "B. dealt",
-                    "C. deals",
-                    "D. was dealing"
+                    "has been dealing",
+                    "dealt",
+                    "deals",
+                    "was dealing"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been dealing' diễn tả việc xử lý liên tục từ sáng đến giờ, giải thích tại sao 'services may still be affected' (hiện tại). Present Perfect Continuous kết nối quá khứ với hiện tại.",
@@ -739,10 +909,10 @@
                 level: "Advanced",
                 question: "Several employees ________ concerns about workplace safety, prompting management to schedule a meeting.",
                 options: [
-                    "A. have been raising",
-                    "B. raised",
-                    "C. raise",
-                    "D. were raising"
+                    "have been raising",
+                    "raised",
+                    "raise",
+                    "were raising"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been raising' diễn tả việc nhiều nhân viên liên tục đưa ra lo ngại, dẫn đến quyết định họp (hiện tại). Present Perfect Continuous cho thấy hành động lặp lại nhiều lần trong thời gian gần đây.",
@@ -756,10 +926,10 @@
                 level: "Advanced",
                 question: "The consulting firm ________ its services to include digital transformation, which has attracted many new clients.",
                 options: [
-                    "A. has expanded",
-                    "B. has been expanding",
-                    "C. expanded",
-                    "D. expands"
+                    "has expanded",
+                    "has been expanding",
+                    "expanded",
+                    "expands"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has expanded' nhấn mạnh KẾT QUẢ đã hoàn thành (dịch vụ đã được mở rộng), dẫn đến thu hút khách hàng. Với động từ thay đổi trạng thái như 'expand' và kết quả rõ ràng, Present Perfect Simple phù hợp hơn.",
@@ -773,10 +943,10 @@
                 level: "Advanced",
                 question: "Analysts ________ the financial reports carefully before making their recommendations.",
                 options: [
-                    "A. have been reviewing",
-                    "B. reviewed",
-                    "C. review",
-                    "D. had reviewed"
+                    "have been reviewing",
+                    "reviewed",
+                    "review",
+                    "had reviewed"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been reviewing' diễn tả việc xem xét cẩn thận đang diễn ra và chưa kết thúc, trước khi đưa ra khuyến nghị (tương lai gần). Present Perfect Continuous cho thấy quá trình chuẩn bị vẫn đang tiếp diễn.",
@@ -790,10 +960,10 @@
                 level: "Advanced",
                 question: "The quality control team ________ stricter standards recently to improve customer satisfaction.",
                 options: [
-                    "A. has been implementing",
-                    "B. implements",
-                    "C. implemented",
-                    "D. had implemented"
+                    "has been implementing",
+                    "implements",
+                    "implemented",
+                    "had implemented"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been implementing' với 'recently' diễn tả quá trình triển khai tiêu chuẩn nghiêm ngặt hơn đang diễn ra. Present Perfect Continuous phù hợp cho hành động bắt đầu gần đây và vẫn tiếp tục.",
@@ -807,10 +977,10 @@
                 level: "Advanced",
                 question: "We ________ positive feedback from customers since we redesigned the website.",
                 options: [
-                    "A. have been receiving",
-                    "B. received",
-                    "C. receive",
-                    "D. are receiving"
+                    "have been receiving",
+                    "received",
+                    "receive",
+                    "are receiving"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been receiving' với 'since we redesigned' diễn tả việc nhận phản hồi liên tục từ khi thiết kế lại đến nay. 'Since' là dấu hiệu rõ ràng của Present Perfect Continuous.",
@@ -824,10 +994,10 @@
                 level: "Advanced",
                 question: "The legal team ________ the contract terms for weeks, but negotiations are still ongoing.",
                 options: [
-                    "A. has been discussing",
-                    "B. discussed",
-                    "C. discusses",
-                    "D. is discussing"
+                    "has been discussing",
+                    "discussed",
+                    "discusses",
+                    "is discussing"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been discussing' với 'for weeks' diễn tả thảo luận kéo dài nhiều tuần và 'are still ongoing' xác nhận vẫn tiếp diễn. Perfect structure cho TOEIC 950+ khi có cả khoảng thời gian và tình trạng hiện tại.",
@@ -841,10 +1011,10 @@
                 level: "Advanced",
                 question: "Local suppliers ________ difficulty keeping up with our orders due to increased production.",
                 options: [
-                    "A. have been experiencing",
-                    "B. experience",
-                    "C. experienced",
-                    "D. had experienced"
+                    "have been experiencing",
+                    "experience",
+                    "experienced",
+                    "had experienced"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been experiencing' diễn tả khó khăn liên tục đang xảy ra do sản xuất tăng. Present Perfect Continuous phù hợp cho tình trạng đang diễn ra và gây ảnh hưởng hiện tại.",
@@ -858,10 +1028,10 @@
                 level: "Advanced",
                 question: "The board ________ whether to approve the merger for several months now.",
                 options: [
-                    "A. has been considering",
-                    "B. considered",
-                    "C. considers",
-                    "D. is considering"
+                    "has been considering",
+                    "considered",
+                    "considers",
+                    "is considering"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been considering' với 'for several months now' diễn tả việc cân nhắc kéo dài nhiều tháng và vẫn chưa quyết định. 'Now' nhấn mạnh liên quan đến hiện tại.",
@@ -875,10 +1045,10 @@
                 level: "Advanced",
                 question: "Competitors ________ to enter our market segment, which requires us to strengthen our position.",
                 options: [
-                    "A. have been attempting",
-                    "B. attempt",
-                    "C. attempted",
-                    "D. are attempting"
+                    "have been attempting",
+                    "attempt",
+                    "attempted",
+                    "are attempting"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Have been attempting' diễn tả các nỗ lực liên tục của đối thủ trong thời gian gần đây, dẫn đến nhu cầu củng cố vị thế (hiện tại). Present Perfect Continuous cho thấy mối đe dọa đang diễn ra.",
@@ -892,10 +1062,10 @@
                 level: "Advanced",
                 question: "The director ________ a more collaborative work environment since taking over the department.",
                 options: [
-                    "A. has been promoting",
-                    "B. promoted",
-                    "C. promotes",
-                    "D. had promoted"
+                    "has been promoting",
+                    "promoted",
+                    "promotes",
+                    "had promoted"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has been promoting' với 'since taking over' diễn tả nỗ lực liên tục từ khi nhậm chức đến nay. 'Since + V-ing' là cấu trúc điển hình cho Present Perfect Continuous trong TOEIC 950+.",
@@ -909,10 +1079,10 @@
                 level: "Advanced",
                 question: "The marketing campaign ________ excellent results, exceeding all our expectations.",
                 options: [
-                    "A. has produced",
-                    "B. has been producing",
-                    "C. produced",
-                    "D. produces"
+                    "has produced",
+                    "has been producing",
+                    "produced",
+                    "produces"
                 ],
                 correct: 0,
                 explanation: "Đúng! 'Has produced' nhấn mạnh KẾT QUẢ đã đạt được (excellent results, exceeding expectations). Khi có kết quả cụ thể và rõ ràng, Present Perfect Simple phù hợp hơn Continuous.",
@@ -926,25 +1096,50 @@
 
         let currentQuestion = 0;
         let answers = new Array(questions.length).fill(null);
-        let score = 0;
+        let timeLeft = 45 * 60; // 45 minutes in seconds
+        let timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    showResults();
+                    return;
+                }
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
 
         function loadQuestion() {
             const q = questions[currentQuestion];
-            const levelBadge = document.getElementById('levelBadge');
-            const questionEl = document.getElementById('question');
-            const optionsEl = document.getElementById('options');
-            const explanationEl = document.getElementById('explanation');
             
-            levelBadge.textContent = q.level;
-            levelBadge.className = 'level-badge level-' + q.level.toLowerCase();
+            document.getElementById('questionLabel').textContent = `CÂU ${currentQuestion + 1}`;
+            document.getElementById('questionText').textContent = q.question;
             
-            questionEl.textContent = `${currentQuestion + 1}. ${q.question}`;
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
             
-            optionsEl.innerHTML = '';
             q.options.forEach((option, index) => {
                 const optionDiv = document.createElement('div');
-                optionDiv.className = 'option';
-                optionDiv.textContent = option;
+                optionDiv.className = 'option-item';
+                
+                const radio = document.createElement('div');
+                radio.className = 'option-radio';
+                
+                const text = document.createElement('div');
+                text.className = 'option-text';
+                text.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
+                
+                optionDiv.appendChild(radio);
+                optionDiv.appendChild(text);
                 
                 if (answers[currentQuestion] !== null) {
                     optionDiv.classList.add('disabled');
@@ -963,13 +1158,13 @@
                     optionDiv.onclick = () => selectAnswer(index);
                 }
                 
-                optionsEl.appendChild(optionDiv);
+                optionsList.appendChild(optionDiv);
             });
             
             if (answers[currentQuestion] !== null) {
                 showExplanation();
             } else {
-                explanationEl.classList.remove('show');
+                document.getElementById('explanationBox').classList.remove('show');
             }
             
             updateProgress();
@@ -982,7 +1177,7 @@
             answers[currentQuestion] = index;
             const q = questions[currentQuestion];
             
-            const options = document.querySelectorAll('.option');
+            const options = document.querySelectorAll('.option-item');
             options.forEach((opt, i) => {
                 opt.classList.add('disabled');
                 if (i === index) {
@@ -1004,15 +1199,16 @@
 
         function showExplanation() {
             const q = questions[currentQuestion];
-            const explanationEl = document.getElementById('explanation');
+            const explanationBox = document.getElementById('explanationBox');
             const isCorrect = answers[currentQuestion] === q.correct;
             
-            explanationEl.className = 'explanation show ' + (isCorrect ? 'correct-explanation' : 'incorrect-explanation');
+            explanationBox.className = 'explanation-box show ' + (isCorrect ? 'correct' : 'incorrect');
             
             let html = `
-                <h3>${isCorrect ? '✅ Chính xác!' : '❌ Chưa chính xác'}</h3>
-                <p><strong>Đáp án đúng:</strong> ${q.options[q.correct]}</p>
-                <p>${q.explanation}</p>
+                <div class="explanation-title">${isCorrect ? '✅ Chính xác!' : '❌ Chưa chính xác'}</div>
+                <div class="explanation-content">
+                    <p><strong>Đáp án đúng:</strong> ${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</p>
+                    <p>${q.explanation}</p>
             `;
             
             if (q.whyWrong && q.whyWrong.length > 0) {
@@ -1026,30 +1222,29 @@
                 `;
             }
             
-            explanationEl.innerHTML = html;
+            html += '</div>';
+            explanationBox.innerHTML = html;
         }
 
         function updateProgress() {
             const answered = answers.filter(a => a !== null).length;
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
+            const percentage = Math.round((currentQuestion + 1) / questions.length * 100);
             
-            progressFill.style.width = (answered / questions.length * 100) + '%';
-            progressText.textContent = `Câu ${currentQuestion + 1}/${questions.length} • Đã trả lời: ${answered}/${questions.length}`;
+            document.getElementById('questionCounter').textContent = `Câu ${currentQuestion + 1}/${questions.length}`;
+            document.getElementById('percentage').textContent = `${percentage}%`;
+            document.getElementById('progressFill').style.width = percentage + '%';
         }
 
         function updateNavButtons() {
-            const prevBtn = document.getElementById('prevBtn');
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            
             const nextBtn = document.getElementById('nextBtn');
-            
-            prevBtn.disabled = currentQuestion === 0;
-            
             if (currentQuestion === questions.length - 1) {
                 nextBtn.textContent = 'Hoàn thành ✓';
-                nextBtn.className = 'nav-button finish-button';
+                nextBtn.className = 'nav-btn btn-finish';
             } else {
-                nextBtn.textContent = 'Câu sau →';
-                nextBtn.className = 'nav-button next-button';
+                nextBtn.textContent = 'Câu tiếp theo →';
+                nextBtn.className = 'nav-btn btn-next';
             }
         }
 
@@ -1070,11 +1265,14 @@
         }
 
         function showResults() {
-            score = answers.filter((ans, idx) => ans === questions[idx].correct).length;
+            clearInterval(timerInterval);
+            
+            const score = answers.filter((ans, idx) => ans === questions[idx].correct).length;
             const percentage = (score / questions.length * 100).toFixed(1);
             
-            document.getElementById('quizCard').style.display = 'none';
-            document.querySelector('.navigation').style.display = 'none';
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('navigation').style.display = 'none';
+            document.querySelector('.progress-section').style.display = 'none';
             
             const resultScreen = document.getElementById('resultScreen');
             const scoreCircle = document.getElementById('scoreCircle');
@@ -1083,7 +1281,7 @@
             const resultDetail = document.getElementById('resultDetail');
             
             scoreText.textContent = `${score}/${questions.length}`;
-            resultDetail.textContent = `Tỷ lệ chính xác: ${percentage}%`;
+            resultDetail.textContent = `Tỷ lệ chính xác: ${percentage}% | Thời gian hoàn thành: ${Math.floor((45 * 60 - timeLeft) / 60)}:${((45 * 60 - timeLeft) % 60).toString().padStart(2, '0')}`;
             
             if (percentage >= 90) {
                 scoreCircle.className = 'score-circle score-excellent';
@@ -1105,17 +1303,22 @@
         function restartQuiz() {
             currentQuestion = 0;
             answers = new Array(questions.length).fill(null);
-            score = 0;
+            timeLeft = 45 * 60;
             
-            document.getElementById('quizCard').style.display = 'block';
-            document.querySelector('.navigation').style.display = 'flex';
+            document.getElementById('quizContent').style.display = 'block';
+            document.getElementById('navigation').style.display = 'flex';
+            document.querySelector('.progress-section').style.display = 'block';
             document.getElementById('resultScreen').classList.remove('show');
             
+            updateTimerDisplay();
+            startTimer();
             loadQuestion();
         }
 
         // Initialize
         window.onload = () => {
+            updateTimerDisplay();
+            startTimer();
             loadQuestion();
         };
     </script>
