@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOEIC Present Perfect Continuous - Interactive Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #1e3c72;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .progress-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .quiz-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .level-basic {
+            background: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .level-intermediate {
+            background: #FFF3E0;
+            color: #F57C00;
+        }
+
+        .level-advanced {
+            background: #FCE4EC;
+            color: #C2185B;
+        }
+
+        .question {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #222;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            padding: 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 16px;
+        }
+
+        .option:hover:not(.selected):not(.disabled) {
+            border-color: #2a5298;
+            background: #f5f9ff;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            cursor: default;
+        }
+
+        .option.correct {
+            border-color: #4CAF50;
+            background: #E8F5E9;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #FFEBEE;
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            animation: slideDown 0.4s ease;
+        }
+
+        .explanation.show {
+            display: block;
+        }
+
+        .explanation.correct-explanation {
+            background: #E8F5E9;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .explanation.incorrect-explanation {
+            background: #FFEBEE;
+            border-left: 4px solid #f44336;
+        }
+
+        .explanation h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .explanation p {
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .why-wrong {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .why-wrong h4 {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #666;
+        }
+
+        .why-wrong ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .why-wrong li {
+            padding: 6px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .nav-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .prev-button {
+            background: #757575;
+            color: white;
+        }
+
+        .prev-button:hover:not(:disabled) {
+            background: #616161;
+            transform: translateY(-2px);
+        }
+
+        .next-button {
+            background: #2a5298;
+            color: white;
+        }
+
+        .next-button:hover:not(:disabled) {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+
+        .finish-button {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .finish-button:hover {
+            background: #43A047;
+            transform: translateY(-2px);
+        }
+
+        .result-screen {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            text-align: center;
+            display: none;
+        }
+
+        .result-screen.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .score-circle {
+            width: 180px;
+            height: 180px;
+            margin: 30px auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .score-excellent {
+            background: linear-gradient(135deg, #4CAF50, #8BC34A);
+        }
+
+        .score-good {
+            background: linear-gradient(135deg, #2196F3, #03A9F4);
+        }
+
+        .score-fair {
+            background: linear-gradient(135deg, #FF9800, #FFC107);
+        }
+
+        .score-poor {
+            background: linear-gradient(135deg, #f44336, #E91E63);
+        }
+
+        .restart-button {
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: #2a5298;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover {
+            background: #1e3c72;
+            transform: translateY(-2px);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .quiz-card {
+                padding: 20px;
+            }
+            
+            .question {
+                font-size: 16px;
+            }
+            
+            .option {
+                padding: 15px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 TOEIC Present Perfect Continuous Quiz</h1>
+            <p>Mục tiêu: 950+ | 30 câu từ cơ bản đến nâng cao</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Câu 1/30</div>
+        </div>
+
+        <div class="quiz-card" id="quizCard">
+            <div class="level-badge" id="levelBadge"></div>
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="explanation" id="explanation"></div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-button prev-button" id="prevBtn" onclick="previousQuestion()">← Câu trước</button>
+            <button class="nav-button next-button" id="nextBtn" onclick="nextQuestion()">Câu sau →</button>
+        </div>
+
+        <div class="result-screen" id="resultScreen">
+            <h2>🎉 Hoàn thành!</h2>
+            <div class="score-circle" id="scoreCircle">
+                <span id="scoreText"></span>
+            </div>
+            <h3 id="resultMessage"></h3>
+            <p id="resultDetail"></p>
+            <button class="restart-button" onclick="restartQuiz()">🔄 Làm lại</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                level: "Basic",
+                question: "The company ________ a new marketing strategy for the past three months.",
+                options: [
+                    "A. has been developing",
+                    "B. has developed",
+                    "C. was developing",
+                    "D. develops"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been developing' (hiện tại hoàn thành tiếp diễn) diễn tả hành động bắt đầu từ quá khứ, kéo dài liên tục đến hiện tại và nhấn mạnh sự liên tục. Có 'for the past three months' chỉ khoảng thời gian kéo dài.",
+                whyWrong: [
+                    "B. Has developed (hiện tại hoàn thành): nhấn mạnh kết quả, không nhấn mạnh sự liên tục trong suốt 3 tháng.",
+                    "C. Was developing (quá khứ tiếp diễn): chỉ hành động đang xảy ra tại một thời điểm trong quá khứ, không liên hệ với hiện tại.",
+                    "D. Develops (hiện tại đơn): diễn tả thói quen/sự thật, không phù hợp với khoảng thời gian 'for the past three months'."
+                ]
+            },
+            {
+                level: "Basic",
+                question: "We ________ for the manager since 9 a.m., but he still hasn't arrived.",
+                options: [
+                    "A. have been waiting",
+                    "B. waited",
+                    "C. are waiting",
+                    "D. wait"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been waiting' diễn tả hành động bắt đầu từ 9 giờ sáng, kéo dài liên tục đến hiện tại (vẫn đang chờ). Từ 'since' là dấu hiệu của Present Perfect Continuous.",
+                whyWrong: [
+                    "B. Waited (quá khứ đơn): chỉ hành động đã hoàn thành trong quá khứ, không liên quan đến hiện tại.",
+                    "C. Are waiting (hiện tại tiếp diễn): chỉ hành động đang xảy ra hiện tại, không nói lên khoảng thời gian đã chờ từ 9 giờ sáng.",
+                    "D. Wait (hiện tại đơn): diễn tả thói quen, không phù hợp với tình huống cụ thể này."
+                ]
+            },
+            {
+                level: "Basic",
+                question: "She looks tired because she ________ on this report all day.",
+                options: [
+                    "A. has been working",
+                    "B. worked",
+                    "C. works",
+                    "D. is working"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been working' giải thích nguyên nhân hiện tại (tired) bằng hành động kéo dài suốt cả ngày. Present Perfect Continuous thường dùng để giải thích kết quả/hậu quả ở hiện tại.",
+                whyWrong: [
+                    "B. Worked (quá khứ đơn): không liên kết với tình trạng hiện tại (looks tired now).",
+                    "C. Works (hiện tại đơn): diễn tả thói quen, không giải thích được tại sao bây giờ mệt.",
+                    "D. Is working (hiện tại tiếp diễn): chỉ hành động đang xảy ra, không nói lên đã làm việc 'all day'."
+                ]
+            },
+            {
+                level: "Basic",
+                question: "How long ________ English before you moved to the US?",
+                options: [
+                    "A. had you been studying",
+                    "B. have you been studying",
+                    "C. did you study",
+                    "D. are you studying"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Had you been studying' (quá khứ hoàn thành tiếp diễn) diễn tả hành động kéo dài đến một mốc trong quá khứ (before you moved). Câu hỏi về khoảng thời gian trước sự kiện quá khứ.",
+                whyWrong: [
+                    "B. Have you been studying (hiện tại hoàn thành tiếp diễn): dùng cho hành động liên quan đến hiện tại, không phù hợp vì đã 'moved' (quá khứ).",
+                    "C. Did you study (quá khứ đơn): không nhấn mạnh sự liên tục và khoảng thời gian 'how long'.",
+                    "D. Are you studying (hiện tại tiếp diễn): dùng cho hiện tại, hoàn toàn sai ngữ cảnh quá khứ."
+                ]
+            },
+            {
+                level: "Basic",
+                question: "They ________ the new software for two weeks now.",
+                options: [
+                    "A. have been testing",
+                    "B. tested",
+                    "C. test",
+                    "D. were testing"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been testing' với 'for two weeks now' chỉ hành động bắt đầu 2 tuần trước, vẫn tiếp diễn đến hiện tại. 'Now' nhấn mạnh liên hệ với thời điểm nói.",
+                whyWrong: [
+                    "B. Tested (quá khứ đơn): chỉ hành động đã hoàn thành, không còn tiếp diễn.",
+                    "C. Test (hiện tại đơn): diễn tả thói quen chung, không phù hợp với khoảng thời gian cụ thể.",
+                    "D. Were testing (quá khứ tiếp diễn): chỉ hành động trong quá khứ, không liên quan đến 'now'."
+                ]
+            },
+            {
+                level: "Basic",
+                question: "I ________ to contact you all morning. Where have you been?",
+                options: [
+                    "A. have been trying",
+                    "B. tried",
+                    "C. try",
+                    "D. was trying"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been trying' diễn tả nỗ lực liên tục từ sáng đến giờ. 'All morning' là dấu hiệu của Present Perfect Continuous, và câu hỏi 'Where have you been?' xác nhận thời điểm hiện tại.",
+                whyWrong: [
+                    "B. Tried (quá khứ đơn): chỉ hành động đã xong, không nhấn mạnh nỗ lực liên tục 'all morning'.",
+                    "C. Try (hiện tại đơn): diễn tả thói quen, không phù hợp với tình huống cụ thể.",
+                    "D. Was trying (quá khứ tiếp diễn): không liên kết với hiện tại (Where have you been?)."
+                ]
+            },
+            {
+                level: "Intermediate",
+                question: "The sales team ________ consistently high results this quarter, which is why they received a bonus.",
+                options: [
+                    "A. has been achieving",
+                    "B. has achieved",
+                    "C. achieved",
+                    "D. had been achieving"
+                ],
+                correct: 1,
+                explanation: "Đúng! 'Has achieved' (hiện tại hoàn thành đơn) nhấn mạnh KẾT QUẢ (high results) đã đạt được, dẫn đến phần thưởng. Present Perfect Continuous nhấn mạnh quá trình, nhưng ở đây ta cần nhấn mạnh thành tích.",
+                whyWrong: [
+                    "A. Has been achieving: nhấn mạnh quá trình liên tục hơn là kết quả cụ thể, ít phù hợp với 'received a bonus' (kết quả rõ ràng).",
+                    "C. Achieved (quá khứ đơn): không liên kết với hiện tại 'this quarter' vẫn đang trong thời gian hiện tại.",
+                    "D. Had been achieving (quá khứ hoàn thành tiếp diễn): dùng cho hành động trước một mốc quá khứ, không phù hợp ở đây."
+                ]
+            },
+            {
+                level: "Intermediate",
+                question: "Ms. Johnson ________ with several international clients lately, so she might be unavailable.",
+                options: [
+                    "A. has been meeting",
+                    "B. meets",
+                    "C. met",
+                    "D. is meeting"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been meeting' với 'lately' diễn tả các cuộc họp liên tục trong thời gian gần đây, giải thích tình trạng hiện tại (might be unavailable). Nhấn mạnh sự lặp lại và liên tục.",
+                whyWrong: [
+                    "B. Meets (hiện tại đơn): diễn tả thói quen chung, không nhấn mạnh hoạt động tăng cường 'lately'.",
+                    "C. Met (quá khứ đơn): chỉ sự kiện quá khứ, không giải thích tình trạng hiện tại.",
+                    "D. Is meeting (hiện tại tiếp diễn): chỉ hành động đang xảy ra ngay bây giờ, không phù hợp với 'lately' (khoảng thời gian rộng hơn)."
+                ]
+            },
+            {
+                level: "Intermediate",
+                question: "The construction noise ________ me awake every night this week.",
+                options: [
+                    "A. has been keeping",
+                    "B. kept",
+                    "C. keeps",
+                    "D. is keeping"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been keeping' diễn tả tình trạng tiếp diễn suốt tuần này ('this week' - khoảng thời gian chưa kết thúc). Present Perfect Continuous phù hợp với hành động lặp lại trong khoảng thời gian đến hiện tại.",
+                whyWrong: [
+                    "B. Kept (quá khứ đơn): 'this week' chưa kết thúc nên không dùng quá khứ đơn.",
+                    "C. Keeps (hiện tại đơn): có thể dùng nhưng không nhấn mạnh sự liên tục trong suốt tuần như Present Perfect Continuous.",
+                    "D. Is keeping (hiện tại tiếp diễn): chỉ hành động đang xảy ra ngay bây giờ, không bao quát 'every night this week'."
+                ]
+            },
+            {
+                level: "Intermediate",
+                question: "Our team ________ overtime to meet the deadline, but we still need more time.",
+                options: [
+                    "A. has been working",
+                    "B. worked",
+                    "C. works",
+                    "D. had worked"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been working' nhấn mạnh nỗ lực liên tục đến hiện tại, và 'but we still need' cho thấy hành động vẫn liên quan đến hiện tại. Present Perfect Continuous phù hợp để nói về nỗ lực chưa đạt kết quả mong muốn.",
+                whyWrong: [
+                    "B. Worked (quá khứ đơn): ngụ ý đã ngừng làm thêm giờ, không phù hợp với 'we still need more time'.",
+                    "C. Works (hiện tại đơn): diễn tả thói quen, không nhấn mạnh nỗ lực đặc biệt để 'meet the deadline'.",
+                    "D. Had worked (quá khứ hoàn thành): dùng cho hành động trước một mốc quá khứ, không phù hợp ở đây."
+                ]
+            },
+            {
+                level: "Intermediate",
+                question: "The company ________ its market share gradually over the last five years.",
+                options: [
+                    "A. has been increasing",
+                    "B. has increased",
+                    "C. increased",
+                    "D. increases"
+                ],
+                correct: 1,
+                explanation: "Đúng! 'Has increased' nhấn mạnh KẾT QUẢ (thị phần đã tăng), trong khi 'gradually over the last five years' mô tả quá trình. Với động từ trạng thái như 'increase' (có thể đo lường), ta thường dùng Present Perfect để nhấn mạnh thành tựu.",
+                whyWrong: [
+                    "A. Has been increasing: cũng đúng ngữ pháp nhưng trong TOEIC, khi có kết quả đo lường rõ ràng (market share), Present Perfect Simple được ưa chuộng hơn.",
+                    "C. Increased (quá khứ đơn): 'over the last five years' kéo dài đến hiện tại nên cần Present Perfect.",
+                    "D. Increases (hiện tại đơn): diễn tả sự thật chung, không phù hợp với khoảng thời gian cụ thể 'last five years'."
+                ]
+            },
+            {
+                level: "Intermediate",
+                question: "Why is the office so messy? What ________ here?",
+                options: [
+                    "A. have you been doing",
+                    "B. did you do",
+                    "C. do you do",
+                    "D. were you doing"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have you been doing' hỏi về hành động vừa xảy ra, còn để lại kết quả ở hiện tại (messy office). Present Perfect Continuous dùng để hỏi về nguyên nhân của tình trạng hiện tại.",
+                whyWrong: [
+                    "B. Did you do (quá khứ đơn): hỏi về hành động trong quá khứ nhưng không nhấn mạnh kết quả còn lại ở hiện tại.",
+                    "C. Do you do (hiện tại đơn): hỏi về thói quen, không phù hợp với tình huống cụ thể (office is messy now).",
+                    "D. Were you doing (quá khứ tiếp diễn): hỏi về hành động đang xảy ra tại một thời điểm quá khứ, không liên hệ với hiện tại."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The research department ________ data from various sources, which should help us make an informed decision.",
+                options: [
+                    "A. has been collecting",
+                    "B. has collected",
+                    "C. had been collecting",
+                    "D. collected"
+                ],
+                correct: 1,
+                explanation: "Đúng! 'Has collected' nhấn mạnh dữ liệu ĐÃ THU THẬP XONG và sẵn sàng để ra quyết định. 'Which should help' chỉ kết quả hoàn thành. Nếu dùng 'has been collecting', ngụ ý vẫn đang thu thập, chưa sẵn sàng.",
+                whyWrong: [
+                    "A. Has been collecting: nhấn mạnh quá trình vẫn đang tiếp diễn, không phù hợp với 'should help us make a decision' (cần dữ liệu đã có).",
+                    "C. Had been collecting (quá khứ hoàn thành tiếp diễn): dùng cho hành động trước một mốc quá khứ, không hợp lý ở đây.",
+                    "D. Collected (quá khứ đơn): không liên kết với hiện tại (should help us now)."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "By the time we launch the product, the team ________ on this project for over a year.",
+                options: [
+                    "A. will have been working",
+                    "B. has been working",
+                    "C. will work",
+                    "D. works"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Will have been working' (tương lai hoàn thành tiếp diễn) diễn tả hành động sẽ kéo dài cho đến một thời điểm trong tương lai (when we launch). 'By the time' là dấu hiệu của Future Perfect Continuous.",
+                whyWrong: [
+                    "B. Has been working (hiện tại hoàn thành tiếp diễn): diễn tả hành động đến hiện tại, nhưng 'by the time we launch' chỉ thời điểm tương lai.",
+                    "C. Will work (tương lai đơn): chỉ hành động sẽ xảy ra, không nhấn mạnh khoảng thời gian 'over a year'.",
+                    "D. Works (hiện tại đơn): diễn tả thói quen, hoàn toàn sai ngữ cảnh tương lai."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The company's profits ________ steadily, despite the economic downturn affecting most competitors.",
+                options: [
+                    "A. have been rising",
+                    "B. rise",
+                    "C. rose",
+                    "D. had risen"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been rising' diễn tả xu hướng tăng liên tục đến hiện tại, đặc biệt trong bối cảnh khó khăn ('despite downturn'). Present Perfect Continuous nhấn mạnh sự liên tục và đáng chú ý của xu hướng.",
+                whyWrong: [
+                    "B. Rise (hiện tại đơn): diễn tả sự thật chung, không nhấn mạnh xu hướng đang diễn ra.",
+                    "C. Rose (quá khứ đơn): chỉ sự kiện đã xảy ra, không nói lên xu hướng liên tục đến hiện tại.",
+                    "D. Had risen (quá khứ hoàn thành): dùng cho hành động trước một mốc quá khứ, không phù hợp ở đây."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "Employees ________ about the lack of communication from management recently.",
+                options: [
+                    "A. have been complaining",
+                    "B. complained",
+                    "C. complain",
+                    "D. are complaining"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been complaining' với 'recently' diễn tả tình trạng phàn nàn liên tục trong thời gian gần đây. Present Perfect Continuous thích hợp cho hành động lặp lại nhiều lần trong một khoảng thời gian đến hiện tại.",
+                whyWrong: [
+                    "B. Complained (quá khứ đơn): 'recently' kéo dài đến hiện tại nên cần Present Perfect Continuous.",
+                    "C. Complain (hiện tại đơn): diễn tả thói quen chung, không nhấn mạnh tình trạng 'recently'.",
+                    "D. Are complaining (hiện tại tiếp diễn): chỉ hành động đang xảy ra ngay bây giờ, không bao quát 'recently'."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The manufacturing plant ________ at full capacity since the beginning of the year to meet increased demand.",
+                options: [
+                    "A. has been operating",
+                    "B. operates",
+                    "C. operated",
+                    "D. will operate"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been operating' với 'since the beginning of the year' diễn tả hoạt động liên tục từ đầu năm đến nay. 'Since' là dấu hiệu điển hình của Present Perfect Continuous, và 'at full capacity' nhấn mạnh cường độ liên tục.",
+                whyWrong: [
+                    "B. Operates (hiện tại đơn): diễn tả hoạt động thông thường, không nhấn mạnh tình trạng đặc biệt 'since the beginning of the year'.",
+                    "C. Operated (quá khứ đơn): 'since the beginning of the year' kéo dài đến hiện tại nên cần Present Perfect.",
+                    "D. Will operate (tương lai đơn): sai hoàn toàn vì đã hoạt động từ đầu năm."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "Mr. Peterson ________ the same presentation to different departments all week, which explains why he looks exhausted.",
+                options: [
+                    "A. has been giving",
+                    "B. gave",
+                    "C. gives",
+                    "D. is giving"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been giving' diễn tả hành động lặp lại nhiều lần suốt tuần ('all week' - chưa kết thúc), giải thích tình trạng hiện tại (looks exhausted). Perfect structure cho TOEIC 950+.",
+                whyWrong: [
+                    "B. Gave (quá khứ đơn): 'all week' (this week) chưa kết thúc nên cần Present Perfect Continuous.",
+                    "C. Gives (hiện tại đơn): diễn tả thói quen, không giải thích được tình trạng mệt mỏi bất thường.",
+                    "D. Is giving (hiện tại tiếp diễn): chỉ hành động đang xảy ra ngay bây giờ, không bao quát 'all week'."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "Investors ________ confidence in the stock market lately due to political instability.",
+                options: [
+                    "A. have been losing",
+                    "B. lose",
+                    "C. lost",
+                    "D. had lost"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been losing' với 'lately' diễn tả xu hướng mất dần niềm tin trong thời gian gần đây. Present Perfect Continuous phù hợp để mô tả xu hướng/thay đổi dần dần đang diễn ra.",
+                whyWrong: [
+                    "B. Lose (hiện tại đơn): diễn tả sự thật chung, không thể hiện xu hướng 'lately'.",
+                    "C. Lost (quá khứ đơn): 'lately' liên quan đến hiện tại nên cần Present Perfect.",
+                    "D. Had lost (quá khứ hoàn thành): dùng cho hành động trước một mốc quá khứ, không phù hợp ở đây."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The IT department ________ with network issues all morning, so some services may still be affected.",
+                options: [
+                    "A. has been dealing",
+                    "B. dealt",
+                    "C. deals",
+                    "D. was dealing"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been dealing' diễn tả việc xử lý liên tục từ sáng đến giờ, giải thích tại sao 'services may still be affected' (hiện tại). Present Perfect Continuous kết nối quá khứ với hiện tại.",
+                whyWrong: [
+                    "B. Dealt (quá khứ đơn): ngụ ý đã xử lý xong, không phù hợp với 'may still be affected'.",
+                    "C. Deals (hiện tại đơn): diễn tả nhiệm vụ thông thường, không phản ánh tình huống khẩn cấp 'all morning'.",
+                    "D. Was dealing (quá khứ tiếp diễn): không liên kết với hiện tại (may still be affected now)."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "Several employees ________ concerns about workplace safety, prompting management to schedule a meeting.",
+                options: [
+                    "A. have been raising",
+                    "B. raised",
+                    "C. raise",
+                    "D. were raising"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been raising' diễn tả việc nhiều nhân viên liên tục đưa ra lo ngại, dẫn đến quyết định họp (hiện tại). Present Perfect Continuous cho thấy hành động lặp lại nhiều lần trong thời gian gần đây.",
+                whyWrong: [
+                    "B. Raised (quá khứ đơn): có thể dùng nhưng không nhấn mạnh tính liên tục và lặp lại như Present Perfect Continuous (điểm phân biệt cho TOEIC 950+).",
+                    "C. Raise (hiện tại đơn): diễn tả thói quen, không phù hợp với tình huống cụ thể dẫn đến 'prompting management'.",
+                    "D. Were raising (quá khứ tiếp diễn): không liên kết với quyết định hiện tại (to schedule a meeting)."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The consulting firm ________ its services to include digital transformation, which has attracted many new clients.",
+                options: [
+                    "A. has expanded",
+                    "B. has been expanding",
+                    "C. expanded",
+                    "D. expands"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has expanded' nhấn mạnh KẾT QUẢ đã hoàn thành (dịch vụ đã được mở rộng), dẫn đến thu hút khách hàng. Với động từ thay đổi trạng thái như 'expand' và kết quả rõ ràng, Present Perfect Simple phù hợp hơn.",
+                whyWrong: [
+                    "B. Has been expanding: nhấn mạnh quá trình đang mở rộng, nhưng 'which has attracted' cho thấy việc mở rộng đã hoàn thành và có kết quả.",
+                    "C. Expanded (quá khứ đơn): không liên kết với kết quả hiện tại 'has attracted'.",
+                    "D. Expands (hiện tại đơn): diễn tả hoạt động thường xuyên, không phù hợp với sự kiện cụ thể."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "Analysts ________ the financial reports carefully before making their recommendations.",
+                options: [
+                    "A. have been reviewing",
+                    "B. reviewed",
+                    "C. review",
+                    "D. had reviewed"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been reviewing' diễn tả việc xem xét cẩn thận đang diễn ra và chưa kết thúc, trước khi đưa ra khuyến nghị (tương lai gần). Present Perfect Continuous cho thấy quá trình chuẩn bị vẫn đang tiếp diễn.",
+                whyWrong: [
+                    "B. Reviewed (quá khứ đơn): ngụ ý đã xem xét xong, nhưng 'before making recommendations' cho thấy quá trình chưa hoàn thành.",
+                    "C. Review (hiện tại đơn): diễn tả thói quen, không phù hợp với tình huống cụ thể này.",
+                    "D. Had reviewed (quá khứ hoàn thành): dùng cho hành động trước một mốc quá khứ, không phù hợp ở đây."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The quality control team ________ stricter standards recently to improve customer satisfaction.",
+                options: [
+                    "A. has been implementing",
+                    "B. implements",
+                    "C. implemented",
+                    "D. had implemented"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been implementing' với 'recently' diễn tả quá trình triển khai tiêu chuẩn nghiêm ngặt hơn đang diễn ra. Present Perfect Continuous phù hợp cho hành động bắt đầu gần đây và vẫn tiếp tục.",
+                whyWrong: [
+                    "B. Implements (hiện tại đơn): diễn tả thói quen, không thể hiện sự thay đổi 'recently'.",
+                    "C. Implemented (quá khứ đơn): 'recently' kéo dài đến hiện tại nên cần Present Perfect.",
+                    "D. Had implemented (quá khứ hoàn thành): dùng cho hành động trước một mốc quá khứ, không phù hợp."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "We ________ positive feedback from customers since we redesigned the website.",
+                options: [
+                    "A. have been receiving",
+                    "B. received",
+                    "C. receive",
+                    "D. are receiving"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been receiving' với 'since we redesigned' diễn tả việc nhận phản hồi liên tục từ khi thiết kế lại đến nay. 'Since' là dấu hiệu rõ ràng của Present Perfect Continuous.",
+                whyWrong: [
+                    "B. Received (quá khứ đơn): 'since we redesigned' kéo dài đến hiện tại nên cần Present Perfect.",
+                    "C. Receive (hiện tại đơn): diễn tả hoạt động thông thường, không nhấn mạnh xu hướng từ 'since we redesigned'.",
+                    "D. Are receiving (hiện tại tiếp diễn): chỉ hành động đang xảy ra ngay bây giờ, không bao quát khoảng thời gian từ 'since'."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The legal team ________ the contract terms for weeks, but negotiations are still ongoing.",
+                options: [
+                    "A. has been discussing",
+                    "B. discussed",
+                    "C. discusses",
+                    "D. is discussing"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been discussing' với 'for weeks' diễn tả thảo luận kéo dài nhiều tuần và 'are still ongoing' xác nhận vẫn tiếp diễn. Perfect structure cho TOEIC 950+ khi có cả khoảng thời gian và tình trạng hiện tại.",
+                whyWrong: [
+                    "B. Discussed (quá khứ đơn): ngụ ý đã ngừng thảo luận, không phù hợp với 'are still ongoing'.",
+                    "C. Discusses (hiện tại đơn): diễn tả thói quen, không nhấn mạnh nỗ lực 'for weeks'.",
+                    "D. Is discussing (hiện tại tiếp diễn): chỉ hành động đang xảy ra ngay bây giờ, không bao quát 'for weeks'."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "Local suppliers ________ difficulty keeping up with our orders due to increased production.",
+                options: [
+                    "A. have been experiencing",
+                    "B. experience",
+                    "C. experienced",
+                    "D. had experienced"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been experiencing' diễn tả khó khăn liên tục đang xảy ra do sản xuất tăng. Present Perfect Continuous phù hợp cho tình trạng đang diễn ra và gây ảnh hưởng hiện tại.",
+                whyWrong: [
+                    "B. Experience (hiện tại đơn): diễn tả tình trạng chung, không nhấn mạnh vấn đề đang diễn ra 'due to increased production'.",
+                    "C. Experienced (quá khứ đơn): không liên kết với tình trạng hiện tại.",
+                    "D. Had experienced (quá khứ hoàn thành): dùng cho hành động trước một mốc quá khứ, không phù hợp."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The board ________ whether to approve the merger for several months now.",
+                options: [
+                    "A. has been considering",
+                    "B. considered",
+                    "C. considers",
+                    "D. is considering"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been considering' với 'for several months now' diễn tả việc cân nhắc kéo dài nhiều tháng và vẫn chưa quyết định. 'Now' nhấn mạnh liên quan đến hiện tại.",
+                whyWrong: [
+                    "B. Considered (quá khứ đơn): ngụ ý đã kết thúc quá trình cân nhắc, không phù hợp với 'now'.",
+                    "C. Considers (hiện tại đơn): diễn tả hoạt động thường xuyên, không nhấn mạnh quá trình kéo dài 'for several months'.",
+                    "D. Is considering (hiện tại tiếp diễn): chỉ hành động đang xảy ra hiện tại, không bao quát 'for several months'."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "Competitors ________ to enter our market segment, which requires us to strengthen our position.",
+                options: [
+                    "A. have been attempting",
+                    "B. attempt",
+                    "C. attempted",
+                    "D. are attempting"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Have been attempting' diễn tả các nỗ lực liên tục của đối thủ trong thời gian gần đây, dẫn đến nhu cầu củng cố vị thế (hiện tại). Present Perfect Continuous cho thấy mối đe dọa đang diễn ra.",
+                whyWrong: [
+                    "B. Attempt (hiện tại đơn): diễn tả hoạt động chung, không nhấn mạnh nỗ lực gia tăng gần đây.",
+                    "C. Attempted (quá khứ đơn): không liên kết với nhu cầu hiện tại 'requires us to strengthen'.",
+                    "D. Are attempting (hiện tại tiếp diễn): chỉ hành động đang xảy ra ngay bây giờ, không bao quát xu hướng kéo dài."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The director ________ a more collaborative work environment since taking over the department.",
+                options: [
+                    "A. has been promoting",
+                    "B. promoted",
+                    "C. promotes",
+                    "D. had promoted"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has been promoting' với 'since taking over' diễn tả nỗ lực liên tục từ khi nhậm chức đến nay. 'Since + V-ing' là cấu trúc điển hình cho Present Perfect Continuous trong TOEIC 950+.",
+                whyWrong: [
+                    "B. Promoted (quá khứ đơn): 'since taking over' kéo dài đến hiện tại nên cần Present Perfect.",
+                    "C. Promotes (hiện tại đơn): diễn tả hoạt động chung, không nhấn mạnh sự thay đổi 'since taking over'.",
+                    "D. Had promoted (quá khứ hoàn thành): dùng cho hành động trước một mốc quá khứ, không phù hợp."
+                ]
+            },
+            {
+                level: "Advanced",
+                question: "The marketing campaign ________ excellent results, exceeding all our expectations.",
+                options: [
+                    "A. has produced",
+                    "B. has been producing",
+                    "C. produced",
+                    "D. produces"
+                ],
+                correct: 0,
+                explanation: "Đúng! 'Has produced' nhấn mạnh KẾT QUẢ đã đạt được (excellent results, exceeding expectations). Khi có kết quả cụ thể và rõ ràng, Present Perfect Simple phù hợp hơn Continuous.",
+                whyWrong: [
+                    "B. Has been producing: nhấn mạnh quá trình đang tạo ra kết quả, nhưng 'exceeding all expectations' cho thấy kết quả đã đạt được.",
+                    "C. Produced (quá khứ đơn): không liên kết với hiện tại (kết quả vẫn còn giá trị).",
+                    "D. Produces (hiện tại đơn): diễn tả khả năng chung, không phù hợp với thành tựu cụ thể."
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = new Array(questions.length).fill(null);
+        let score = 0;
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            const levelBadge = document.getElementById('levelBadge');
+            const questionEl = document.getElementById('question');
+            const optionsEl = document.getElementById('options');
+            const explanationEl = document.getElementById('explanation');
+            
+            levelBadge.textContent = q.level;
+            levelBadge.className = 'level-badge level-' + q.level.toLowerCase();
+            
+            questionEl.textContent = `${currentQuestion + 1}. ${q.question}`;
+            
+            optionsEl.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                
+                if (answers[currentQuestion] !== null) {
+                    optionDiv.classList.add('disabled');
+                    if (index === answers[currentQuestion]) {
+                        optionDiv.classList.add('selected');
+                        if (index === q.correct) {
+                            optionDiv.classList.add('correct');
+                        } else {
+                            optionDiv.classList.add('incorrect');
+                        }
+                    }
+                    if (index === q.correct && index !== answers[currentQuestion]) {
+                        optionDiv.classList.add('correct');
+                    }
+                } else {
+                    optionDiv.onclick = () => selectAnswer(index);
+                }
+                
+                optionsEl.appendChild(optionDiv);
+            });
+            
+            if (answers[currentQuestion] !== null) {
+                showExplanation();
+            } else {
+                explanationEl.classList.remove('show');
+            }
+            
+            updateProgress();
+            updateNavButtons();
+        }
+
+        function selectAnswer(index) {
+            if (answers[currentQuestion] !== null) return;
+            
+            answers[currentQuestion] = index;
+            const q = questions[currentQuestion];
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === index) {
+                    opt.classList.add('selected');
+                    if (i === q.correct) {
+                        opt.classList.add('correct');
+                    } else {
+                        opt.classList.add('incorrect');
+                    }
+                }
+                if (i === q.correct && i !== index) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            showExplanation();
+            updateNavButtons();
+        }
+
+        function showExplanation() {
+            const q = questions[currentQuestion];
+            const explanationEl = document.getElementById('explanation');
+            const isCorrect = answers[currentQuestion] === q.correct;
+            
+            explanationEl.className = 'explanation show ' + (isCorrect ? 'correct-explanation' : 'incorrect-explanation');
+            
+            let html = `
+                <h3>${isCorrect ? '✅ Chính xác!' : '❌ Chưa chính xác'}</h3>
+                <p><strong>Đáp án đúng:</strong> ${q.options[q.correct]}</p>
+                <p>${q.explanation}</p>
+            `;
+            
+            if (q.whyWrong && q.whyWrong.length > 0) {
+                html += `
+                    <div class="why-wrong">
+                        <h4>❓ Tại sao các đáp án khác sai:</h4>
+                        <ul>
+                            ${q.whyWrong.map(reason => `<li>• ${reason}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            explanationEl.innerHTML = html;
+        }
+
+        function updateProgress() {
+            const answered = answers.filter(a => a !== null).length;
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            progressFill.style.width = (answered / questions.length * 100) + '%';
+            progressText.textContent = `Câu ${currentQuestion + 1}/${questions.length} • Đã trả lời: ${answered}/${questions.length}`;
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            prevBtn.disabled = currentQuestion === 0;
+            
+            if (currentQuestion === questions.length - 1) {
+                nextBtn.textContent = 'Hoàn thành ✓';
+                nextBtn.className = 'nav-button finish-button';
+            } else {
+                nextBtn.textContent = 'Câu sau →';
+                nextBtn.className = 'nav-button next-button';
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            score = answers.filter((ans, idx) => ans === questions[idx].correct).length;
+            const percentage = (score / questions.length * 100).toFixed(1);
+            
+            document.getElementById('quizCard').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            
+            const resultScreen = document.getElementById('resultScreen');
+            const scoreCircle = document.getElementById('scoreCircle');
+            const scoreText = document.getElementById('scoreText');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultDetail = document.getElementById('resultDetail');
+            
+            scoreText.textContent = `${score}/${questions.length}`;
+            resultDetail.textContent = `Tỷ lệ chính xác: ${percentage}%`;
+            
+            if (percentage >= 90) {
+                scoreCircle.className = 'score-circle score-excellent';
+                resultMessage.textContent = '🏆 Xuất sắc! Bạn đã sẵn sàng cho TOEIC 950+';
+            } else if (percentage >= 75) {
+                scoreCircle.className = 'score-circle score-good';
+                resultMessage.textContent = '👍 Tốt! Tiếp tục luyện tập để đạt mục tiêu';
+            } else if (percentage >= 60) {
+                scoreCircle.className = 'score-circle score-fair';
+                resultMessage.textContent = '📚 Khá! Cần ôn lại các điểm yếu';
+            } else {
+                scoreCircle.className = 'score-circle score-poor';
+                resultMessage.textContent = '💪 Hãy xem lại lý thuyết và làm lại nhé!';
+            }
+            
+            resultScreen.classList.add('show');
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            answers = new Array(questions.length).fill(null);
+            score = 0;
+            
+            document.getElementById('quizCard').style.display = 'block';
+            document.querySelector('.navigation').style.display = 'flex';
+            document.getElementById('resultScreen').classList.remove('show');
+            
+            loadQuestion();
+        }
+
+        // Initialize
+        window.onload = () => {
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
